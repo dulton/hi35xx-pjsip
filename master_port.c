@@ -39,7 +39,7 @@
 
 static HI_S32 s32Ret;
 #define SAMPLE_AUDIO_PTNUMPERFRM   320
-static AIO_ATTR_S stAioAttr;				//¶¨ÒåÒôÆµÊäÈëÊä³öÉè±¸ÊôĞÔ½á¹¹Ìå
+static AIO_ATTR_S stAioAttr;				//å®šä¹‰éŸ³é¢‘è¾“å…¥è¾“å‡ºè®¾å¤‡å±æ€§ç»“æ„ä½“
 
 static int sendframebuf[AUDIO_ONEFRAME_SIZE_C];
 static int sendframetempbuf[AUDIO_ONEFRAME_SIZE_C];
@@ -70,31 +70,31 @@ HI_S32 SAMPLE_COMM_SYS_Init(VB_CONF_S *pstVbConf)
     HI_MPI_SYS_Exit();
     HI_MPI_VB_Exit();
 
-    if (NULL == pstVbConf)						//¿ÕÖ¸Õëå
+    if (NULL == pstVbConf)						//ç©ºæŒ‡é’ˆï¿½
     {
         SAMPLE_PRT("input parameter is null, it is invaild!\n");
         return HI_FAILURE;
     }
-    s32Ret = HI_MPI_VB_SetConf(pstVbConf);		//ÉèÖÃMPPÊÓÆµ»º³å³ØÊôĞÔ
+    s32Ret = HI_MPI_VB_SetConf(pstVbConf);		//è®¾ç½®MPPè§†é¢‘ç¼“å†²æ± å±æ€§
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("HI_MPI_VB_SetConf failed!\n");
         return HI_FAILURE;
     }
-    s32Ret = HI_MPI_VB_Init();						//³õÊ¼»¯MPPÊÓÆµ»º³å³Ø  ÏÈÅäÖÃºó³õÊ¼»¯
+    s32Ret = HI_MPI_VB_Init();						//åˆå§‹åŒ–MPPè§†é¢‘ç¼“å†²æ±   å…ˆé…ç½®ååˆå§‹åŒ–
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("HI_MPI_VB_Init failed!\n");
         return HI_FAILURE;
     }
     stSysConf.u32AlignWidth = SAMPLE_SYS_ALIGN_WIDTH;
-    s32Ret = HI_MPI_SYS_SetConf(&stSysConf);		//ÅäÖÃÏµÍ³¿ØÖÆ²ÎÊı
+    s32Ret = HI_MPI_SYS_SetConf(&stSysConf);		//é…ç½®ç³»ç»Ÿæ§åˆ¶å‚æ•°
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("HI_MPI_SYS_SetConf failed\n");
         return HI_FAILURE;
     }
-    s32Ret = HI_MPI_SYS_Init();						//³õÊ¼»¯MPPÏµÍ³(³ıÒôÆµµÄ±à½âÂëÍ¨µÀÍâ)
+    s32Ret = HI_MPI_SYS_Init();						//åˆå§‹åŒ–MPPç³»ç»Ÿ(é™¤éŸ³é¢‘çš„ç¼–è§£ç é€šé“å¤–)
     if (HI_SUCCESS != s32Ret)
     {
         SAMPLE_PRT("HI_MPI_SYS_Init failed!\n");
@@ -134,7 +134,7 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 	HI_S32 AiFd;
 	fd_set read_fds;
 	struct timeval TimeoutVal;
-	AI_CHN_PARAM_S stAiChnPara;					//¶¨ÒåÍ¨µÀ²ÎÊı½á¹¹Ìå
+	AI_CHN_PARAM_S stAiChnPara;					//å®šä¹‰é€šé“å‚æ•°ç»“æ„ä½“
 	AUDIO_STREAM_S stStream;
 
 	memset(sendframebuf,0,320);
@@ -142,9 +142,9 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 	for(chn=0;chn<1;chn++)
 	{
 		AiChn = chn;
-		if(!lance_call_start)		//ºô½ĞÇ°³õÊ¼»¯Ò»´Î  ºô½Ğºó²»½øÈë
+		if(!lance_call_start)		//å‘¼å«å‰åˆå§‹åŒ–ä¸€æ¬¡  å‘¼å«åä¸è¿›å…¥
 		{
-			//»ñÈ¡AIÍ¨µÀ²ÎÊı
+			//è·å–AIé€šé“å‚æ•°
 			s32Ret = HI_MPI_AI_GetChnParam(AiDev, AiChn, &stAiChnPara);
 			if (HI_SUCCESS != s32Ret)
 			{
@@ -152,8 +152,8 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 				return HI_FAILURE;
 			}
 			
-			//ÉèÖÃAIÍ¨µÀ²ÎÊı
-			stAiChnPara.u32UsrFrmDepth = 30;				//ÒôÆµÖ¡»º´æÉî¶È
+			//è®¾ç½®AIé€šé“å‚æ•°
+			stAiChnPara.u32UsrFrmDepth = 30;				//éŸ³é¢‘å¸§ç¼“å­˜æ·±åº¦
 			s32Ret = HI_MPI_AI_SetChnParam(AiDev,AiChn, &stAiChnPara); 		
 			if (HI_SUCCESS != s32Ret)
 			{
@@ -165,20 +165,20 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 		AiFd = HI_MPI_AI_GetFd(AiDev, AiChn);
 		FD_SET(AiFd,&read_fds);
 		//while(1)
-		while(call_flag)			//´«Èëtrue
+		while(call_flag)			//ä¼ å…¥true
 		{
 			TimeoutVal.tv_sec = 1;
 	        TimeoutVal.tv_usec = 0;
 			
 	        FD_ZERO(&read_fds);
 	        FD_SET(AiFd,&read_fds);
-	        //PJ_LOG(4,(THIS_FILE, "....select...."));		//selectºÄÊ±40ms»ñÈ¡1Ö¡
-	        s32Ret = select(AiFd+1, &read_fds, NULL, NULL, &TimeoutVal);			//½øĞĞ×èÈû»ñÈ¡
-	        if (s32Ret < 0) 													//¸ºÖµ£ºselect´íÎó
+	        //PJ_LOG(4,(THIS_FILE, "....select...."));		//selectè€—æ—¶40msè·å–1å¸§
+	        s32Ret = select(AiFd+1, &read_fds, NULL, NULL, &TimeoutVal);			//è¿›è¡Œé˜»å¡è·å–
+	        if (s32Ret < 0) 													//è´Ÿå€¼ï¼šselecté”™è¯¯
 	        {
 	            break;
 	        }
-	        else if (s32Ret == 0) 											//0£ºµÈ´ı³¬Ê±£¬Ã»ÓĞ¿É¶ÁĞ´»ò´íÎóµÄÎÄ¼ş
+	        else if (s32Ret == 0) 											//0ï¼šç­‰å¾…è¶…æ—¶ï¼Œæ²¡æœ‰å¯è¯»å†™æˆ–é”™è¯¯çš„æ–‡ä»¶
 	        {
 	            printf("%s: get ai frame select time out\n", __FUNCTION__);
 	            break;
@@ -186,23 +186,23 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 	        if (FD_ISSET(AiFd, &read_fds))
 			{				
 				//PJ_LOG(4,(THIS_FILE, "HI_MPI_AI_GetFrame"));
-				//´ÓAiÍ¨µÀ»ñÈ¡ÒôÆµÖ¡-----ĞèÒª40msµÄÊ±¼ä--8KµÄÇé¿öÏÂ
+				//ä»Aié€šé“è·å–éŸ³é¢‘å¸§-----éœ€è¦40msçš„æ—¶é—´--8Kçš„æƒ…å†µä¸‹
 				s32Ret = HI_MPI_AI_GetFrame(AiDev, AiChn,&stFrame, NULL, HI_FALSE);		
 				if (HI_SUCCESS != s32Ret )
 				{
-					//			ÊäÈë»º´æÎª0--->failed with 0xa015800e!
+					//			è¾“å…¥ç¼“å­˜ä¸º0--->failed with 0xa015800e!
 					printf("%s: HI_MPI_AI_GetFrame(%d, %d), failed with %#x!\n",__FUNCTION__, AiDev, AiChn, s32Ret);
 					return HI_FAILURE;
 				}
 				//stFrame.enSoundmode=0---momo    enBitwidth=1----16bit/sample    stFrame.u32Len=640byte
 				{					
-					// 8KÊ±  8000µãpÃë/320µãpÖ¡=25Ö¡pÃë	--->40ms/Ö¡		--->Ö®Ç°ÔëÉùÊÇ 30msÏÂ½µÑØ¡¢ÉÏÉıÑØ  10msµÄË®Æ½ĞÅºÅ
-					// 16KÊ± 1600µãpÃë/320µãpÖ¡=50Ö¡pÃë	--->20ms/Ö¡
+					// 8Kæ—¶  8000ç‚¹pç§’/320ç‚¹på¸§=25å¸§pç§’	--->40ms/å¸§		--->ä¹‹å‰å™ªå£°æ˜¯ 30msä¸‹é™æ²¿ã€ä¸Šå‡æ²¿  10msçš„æ°´å¹³ä¿¡å·
+					// 16Kæ—¶ 1600ç‚¹pç§’/320ç‚¹på¸§=50å¸§pç§’	--->20ms/å¸§
 					memcpy(sendframebuf,stFrame.pVirAddr[0],320);
 					//printf("strlen=%d \n",strlen(stFrame.pVirAddr[0]));
 					call_flag = HI_FALSE;	
 				}
-				//HI_MPI_AI_ReleaseFrame(AiDev, AiChn,&stFrame, NULL);			//Î´¼ÓÉÏframeÊÍ·Å½Ó¿ÚÊ± ÏÂ´Îselect·µ»Ø0³ö´í
+				//HI_MPI_AI_ReleaseFrame(AiDev, AiChn,&stFrame, NULL);			//æœªåŠ ä¸Šframeé‡Šæ”¾æ¥å£æ—¶ ä¸‹æ¬¡selectè¿”å›0å‡ºé”™
 			}
 		}					 		
 	}
@@ -212,22 +212,22 @@ HI_S32 lance_audio_ai(HI_S32 call_flag)
 /******************************************************************************
 * function :	Ai -> Aenc -> file
 *				Ai -> Adec -> Ao
-* 				Ai -> pjmedia_port_get_frame¡¾´ÓÏÂÓÎ¶Ë¿Ú»ñÈ¡ÒôÆµÖ¡¡¿
+* 				Ai -> pjmedia_port_get_frameã€ä»ä¸‹æ¸¸ç«¯å£è·å–éŸ³é¢‘å¸§ã€‘
 ******************************************************************************/
 HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
 {								
 	pSAMPLE_AI_S *pstAi = NULL;
 	HI_S32 i;
 	
-    /* config ai aenc dev attr */		//ÅäÖÃAIÒôÆµ±àÂëÊôĞÔ
-    if (pstAioAttr == NULL)					//ÊÇ·ñÅäÖÃ?
+    /* config ai aenc dev attr */		//é…ç½®AIéŸ³é¢‘ç¼–ç å±æ€§
+    if (pstAioAttr == NULL)					//æ˜¯å¦é…ç½®?
     {
         printf("[Func]:%s [Line]:%d [Info]:%s\n", __FUNCTION__, __LINE__, "NULL pointer");
         return HI_FAILURE;
     }
 
     /********************************************
-      step 1: config audio codec			ÅäÖÃÒôÆµ±àÂë--->¸ù¾İ±àÂëÀàĞÍÅäÖÃ
+      step 1: config audio codec			é…ç½®éŸ³é¢‘ç¼–ç --->æ ¹æ®ç¼–ç ç±»å‹é…ç½®
     ********************************************/
     s32Ret = SAMPLE_COMM_AUDIO_CfgAcodec(pstAioAttr, gs_bMicIn);
     if (HI_SUCCESS != s32Ret)
@@ -236,10 +236,10 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
         return HI_FAILURE;
     }
     /********************************************
-      step 2: start Ai						¿ªÊ¼AIÊäÈë
+      step 2: start Ai						å¼€å§‹AIè¾“å…¥
     ********************************************/
-    s32AiChnCnt = pstAioAttr->u32ChnCnt; 			//ÊäÈëµÄÒôÆµ½á¹¹Ìå
-   	s32AencChnCnt = s32AiChnCnt;						//8Â·AencÍ¨µÀ
+    s32AiChnCnt = pstAioAttr->u32ChnCnt; 			//è¾“å…¥çš„éŸ³é¢‘ç»“æ„ä½“
+   	s32AencChnCnt = s32AiChnCnt;						//8è·¯Aencé€šé“
     s32Ret = SAMPLE_COMM_AUDIO_StartAi(AiDev, s32AiChnCnt, pstAioAttr,  gs_bAiAnr, gs_pstAiReSmpAttr);
 	if (s32Ret != HI_SUCCESS)
     {
@@ -247,9 +247,9 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
         return HI_FAILURE;
     }
 	/********************************************
-      step 3: enable AO channle						Ê¹ÄÜAOÍ¨µÀ
+      step 3: enable AO channle						ä½¿èƒ½AOé€šé“
     ********************************************/
-    pstAioAttr->u32ChnCnt = s32AiChnCnt;			//¸üĞÂÍ¨µÀÊı		ÆôÓÃAIÉè±¸ÊôĞÔ¡¢Éè±¸¡¢Í¨µÀ¡¢ÔëÉùÒÖÖÆ¡¢ÖØ²ÉÑù
+    pstAioAttr->u32ChnCnt = s32AiChnCnt;			//æ›´æ–°é€šé“æ•°		å¯ç”¨AIè®¾å¤‡å±æ€§ã€è®¾å¤‡ã€é€šé“ã€å™ªå£°æŠ‘åˆ¶ã€é‡é‡‡æ ·
     s32Ret = SAMPLE_COMM_AUDIO_StartAo(AoDev, AoChn, pstAioAttr, gs_pstAoReSmpAttr);
     if (s32Ret != HI_SUCCESS)
     {
@@ -258,7 +258,7 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
     }
 
     /********************************************
-      step 4: start Aenc						¿ªÊ¼±àÂë	ÒÑ¸üĞÂÍ¨µÀÊıÎª1 ---->´´½¨ÒôÆµ±àÂëÍ¨µÀ
+      step 4: start Aenc						å¼€å§‹ç¼–ç 	å·²æ›´æ–°é€šé“æ•°ä¸º1 ---->åˆ›å»ºéŸ³é¢‘ç¼–ç é€šé“
     ********************************************/
     s32Ret = SAMPLE_COMM_AUDIO_StartAenc(s32AencChnCnt, gs_enPayloadType);
     if (s32Ret != HI_SUCCESS)
@@ -272,7 +272,7 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
         AiChn = i;
 
     
-        s32Ret = SAMPLE_COMM_AUDIO_AencBindAi(AiDev, AiChn, AeChn);		//ÒôÆµ±àÂë°ó¶¨AIÍ¨µÀ
+        s32Ret = SAMPLE_COMM_AUDIO_AencBindAi(AiDev, AiChn, AeChn);		//éŸ³é¢‘ç¼–ç ç»‘å®šAIé€šé“
         if (s32Ret != HI_SUCCESS)
         {
             SAMPLE_DBG(s32Ret);
@@ -280,8 +280,8 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
         }
         printf("Ai(%d,%d) bind to AencChn:%d ok!\n",AiDev , AiChn, AeChn);
     }
-    /* bind AI to AO channle */			//°ó¶¨AIµ½AOÍ¨µÀ
-    if (0)			//µ±resample and anrÊ±,´ËÅĞ¶ÏÎªÕæ
+    /* bind AI to AO channle */			//ç»‘å®šAIåˆ°AOé€šé“
+    if (0)			//å½“resample and anræ—¶,æ­¤åˆ¤æ–­ä¸ºçœŸ
     {
         s32Ret = SAMPLE_COMM_AUDIO_CreatTrdAiAo(AiDev, AiChn, AoDev, AoChn);
         if (s32Ret != HI_SUCCESS)
@@ -292,7 +292,7 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
     }
     else
     {   
-        s32Ret = SAMPLE_COMM_AUDIO_AoBindAi(AiDev, AiChn, AoDev, AoChn);		//°ó¶¨Éè±¸ºÅ¡¢Í¨µÀºÅ
+        s32Ret = SAMPLE_COMM_AUDIO_AoBindAi(AiDev, AiChn, AoDev, AoChn);		//ç»‘å®šè®¾å¤‡å·ã€é€šé“å·
         if (s32Ret != HI_SUCCESS)
         {
             SAMPLE_DBG(s32Ret);
@@ -304,29 +304,29 @@ HI_S32 lance_AUDIO_AiAenc(AIO_ATTR_S *pstAioAttr)
 }
 
 /**************************************
-*				ÒôÆµ³õÊ¼»¯ÅäÖÃ
+*				éŸ³é¢‘åˆå§‹åŒ–é…ç½®
 ***************************************/
 static HI_S32 hi35xx_audio_init(void)
 {
 	//printf("\nhi35xx_audio_init!!\n\n");
     VB_CONF_S stVbConf;
 
-	//³õÊ¼»¯stAio
-	stAioAttr.enSamplerate = AUDIO_SAMPLE_RATE_8000;				//²ÉÑùÂÊ
-	stAioAttr.enBitwidth = AUDIO_BIT_WIDTH_16;					//²ÉÑù¾«¶È
-	stAioAttr.enWorkmode = AIO_MODE_I2S_SLAVE;					//ÒôÆµÊäÈëÊä³ö¹¤×÷Ä£Ê½----->I2S´ÓÄ£Ê½
-	stAioAttr.enSoundmode = AUDIO_SOUND_MODE_MONO;				//ÒôÆµÉùµÀÄ£Ê½----->µ¥ÉùµÀmomo
-	stAioAttr.u32EXFlag = 1;										// 8bitµ½16bitÀ©Õ¹±êÖ¾£¨8bit¾«¶ÈÊ±ÓĞĞ§£©
-	stAioAttr.u32FrmNum = 30;										//»º´æÖ¡ÊıÄ¿		
-	stAioAttr.u32PtNumPerFrm = 160;//SAMPLE_AUDIO_PTNUMPERFRM;	// 320		 //Ã¿Ö¡µÄ²ÉÑùµã¸öÊı  8000µã/Ãë / 320µã/Ö¡ = 25Ö¡/Ãë
-	stAioAttr.u32ChnCnt = CHN_NUM;									//Ö§³ÖµÄ×î´óÍ¨µÀÊıÄ¿
+	//åˆå§‹åŒ–stAio
+	stAioAttr.enSamplerate = AUDIO_SAMPLE_RATE_8000;				//é‡‡æ ·ç‡
+	stAioAttr.enBitwidth = AUDIO_BIT_WIDTH_16;					//é‡‡æ ·ç²¾åº¦
+	stAioAttr.enWorkmode = AIO_MODE_I2S_SLAVE;					//éŸ³é¢‘è¾“å…¥è¾“å‡ºå·¥ä½œæ¨¡å¼----->I2Sä»æ¨¡å¼
+	stAioAttr.enSoundmode = AUDIO_SOUND_MODE_MONO;				//éŸ³é¢‘å£°é“æ¨¡å¼----->å•å£°é“momo
+	stAioAttr.u32EXFlag = 1;										// 8bitåˆ°16bitæ‰©å±•æ ‡å¿—ï¼ˆ8bitç²¾åº¦æ—¶æœ‰æ•ˆï¼‰
+	stAioAttr.u32FrmNum = 30;										//ç¼“å­˜å¸§æ•°ç›®		
+	stAioAttr.u32PtNumPerFrm = 160;//SAMPLE_AUDIO_PTNUMPERFRM;	// 320		 //æ¯å¸§çš„é‡‡æ ·ç‚¹ä¸ªæ•°  8000ç‚¹/ç§’ / 320ç‚¹/å¸§ = 25å¸§/ç§’
+	stAioAttr.u32ChnCnt = CHN_NUM;									//æ”¯æŒçš„æœ€å¤§é€šé“æ•°ç›®
 	stAioAttr.u32ClkSel = 0;
 
 	signal(SIGINT, SAMPLE_AUDIO_HandleSig);
 	signal(SIGTERM, SAMPLE_AUDIO_HandleSig);
 
-	memset(&stVbConf, 0, sizeof(VB_CONF_S));				// ´ÓstVbConf¿ªÊ¼£¬ÇåÁãÒ»¶Î³¤¶ÈÎªVB_CONF_SµÄ¿Õ¼ä
-    s32Ret = SAMPLE_COMM_SYS_Init(&stVbConf);			//ÅäÖÃ³õÊ¼»¯MPPÊÓÆµ»º³å³Ø¡¢MPPÏµÍ³
+	memset(&stVbConf, 0, sizeof(VB_CONF_S));				// ä»stVbConfå¼€å§‹ï¼Œæ¸…é›¶ä¸€æ®µé•¿åº¦ä¸ºVB_CONF_Sçš„ç©ºé—´
+    s32Ret = SAMPLE_COMM_SYS_Init(&stVbConf);			//é…ç½®åˆå§‹åŒ–MPPè§†é¢‘ç¼“å†²æ± ã€MPPç³»ç»Ÿ
     if (HI_SUCCESS != s32Ret)
     {
         printf("%s: system init failed with %d!\n", __FUNCTION__, s32Ret);
@@ -355,14 +355,14 @@ static void clock_callback(const pj_timestamp *ts, void *user_data);
 
 
 /*
- * Create a master port.		´´½¨Ö÷»ú¶Ë¿Ú
+ * Create a master port.		åˆ›å»ºä¸»æœºç«¯å£
  *
  */
-PJ_DEF(pj_status_t) pjmedia_master_port_create( pj_pool_t *pool,		/* »º³å³Ø   pjsua_var.snd_pool		*/
-						pjmedia_port *u_port,										/* ÉÏÁ÷¶Ë¿Ú pjsua_var.null_port		*/
-						pjmedia_port *d_port,										/* ÏÂÁ÷¶Ë¿Ú conf_port					*/
+PJ_DEF(pj_status_t) pjmedia_master_port_create( pj_pool_t *pool,		/* ç¼“å†²æ±    pjsua_var.snd_pool		*/
+						pjmedia_port *u_port,										/* ä¸Šæµç«¯å£ pjsua_var.null_port		*/
+						pjmedia_port *d_port,										/* ä¸‹æµç«¯å£ conf_port					*/
 						unsigned options,											/* 0										*/
-						pjmedia_master_port **p_m)							/* Ö÷»ú¶Ë¿Ú &pjsua_var.null_snd		*/
+						pjmedia_master_port **p_m)							/* ä¸»æœºç«¯å£ &pjsua_var.null_snd		*/
 {
     pjmedia_master_port *m;
     unsigned clock_rate;
@@ -376,46 +376,46 @@ PJ_DEF(pj_status_t) pjmedia_master_port_create( pj_pool_t *pool,		/* »º³å³Ø   pj
     /* Sanity check */
     PJ_ASSERT_RETURN(pool && u_port && d_port && p_m, PJ_EINVAL);
 
-    u_afd = pjmedia_format_get_audio_format_detail(&u_port->info.fmt, PJ_TRUE);		//²é¿´¶Ë¿ÚĞÅÏ¢ÖĞÊÇ·ñ°üº¬ÒôÆµĞÅÏ¢  ÕæÊ±È¡»Ø
+    u_afd = pjmedia_format_get_audio_format_detail(&u_port->info.fmt, PJ_TRUE);		//æŸ¥çœ‹ç«¯å£ä¿¡æ¯ä¸­æ˜¯å¦åŒ…å«éŸ³é¢‘ä¿¡æ¯  çœŸæ—¶å–å›
     d_afd = pjmedia_format_get_audio_format_detail(&d_port->info.fmt, PJ_TRUE);
 
-    /* Both ports MUST have equal clock rate */					//±ØĞëÓĞÏàÍ¬µÄÊ±ÖÓÆµÂÊ
+    /* Both ports MUST have equal clock rate */					//å¿…é¡»æœ‰ç›¸åŒçš„æ—¶é’Ÿé¢‘ç‡
     PJ_ASSERT_RETURN(u_afd->clock_rate == d_afd->clock_rate,
 		     PJMEDIA_ENCCLOCKRATE);
 printf("null_port->clock_rate=%d conf_port->clock_rate=%d\n",u_afd->clock_rate,d_afd->clock_rate);
-//			´òÓ¡³öÀ´¶¼ÊÇ8K----2016.8.24
-    /* Both ports MUST have equal samples per frame */		//±ØĞëÓĞÏàÍ¬µÄÖ¡²ÉÑùÊı
+//			æ‰“å°å‡ºæ¥éƒ½æ˜¯8K----2016.8.24
+    /* Both ports MUST have equal samples per frame */		//å¿…é¡»æœ‰ç›¸åŒçš„å¸§é‡‡æ ·æ•°
     PJ_ASSERT_RETURN(PJMEDIA_PIA_SPF(&u_port->info)==
 			PJMEDIA_PIA_SPF(&d_port->info),
 		     PJMEDIA_ENCSAMPLESPFRAME);
 
-    /* Both ports MUST have equal channel count */				//±ØĞëÓĞÏàÍ¬µÄÍ¨µÀÊı
+    /* Both ports MUST have equal channel count */				//å¿…é¡»æœ‰ç›¸åŒçš„é€šé“æ•°
     PJ_ASSERT_RETURN(u_afd->channel_count == d_afd->channel_count,
 		     PJMEDIA_ENCCHANNEL);
 
 
-    /* Get clock_rate and samples_per_frame from one of the port. */	//´Ó¶Ë¿Ú»ñÈ¡Ê±ÖÓÆµÂÊ¼°Ö¡²ÉÑùÊı
+    /* Get clock_rate and samples_per_frame from one of the port. */	//ä»ç«¯å£è·å–æ—¶é’Ÿé¢‘ç‡åŠå¸§é‡‡æ ·æ•°
     clock_rate = u_afd->clock_rate;							//
     samples_per_frame = PJMEDIA_PIA_SPF(&u_port->info);		//
     channel_count = u_afd->channel_count;					//
 
 
     /* Get the bytes_per_frame value, to determine the size of the
-     * buffer. We take the larger size of the two ports.»ñÈ¡Ö¡×Ö½ÚÊıµÄÖµ  ÒÔ¾ö¶¨»º³åÇø´óĞ¡  ÎÒÃÇÈ¡Á½¸ö¶Ë¿ÚµÄ×î´óÖµ
+     * buffer. We take the larger size of the two ports.è·å–å¸§å­—èŠ‚æ•°çš„å€¼  ä»¥å†³å®šç¼“å†²åŒºå¤§å°  æˆ‘ä»¬å–ä¸¤ä¸ªç«¯å£çš„æœ€å¤§å€¼
      */
     bytes_per_frame = PJMEDIA_AFD_AVG_FSZ(u_afd);
     if (PJMEDIA_AFD_AVG_FSZ(d_afd) > bytes_per_frame)
 		bytes_per_frame = PJMEDIA_AFD_AVG_FSZ(d_afd);
 
 
-    /* Create the master port instance */							//´´½¨Ö÷»ú¶Ë¿ÚÊµÀı
+    /* Create the master port instance */							//åˆ›å»ºä¸»æœºç«¯å£å®ä¾‹
     m = PJ_POOL_ZALLOC_T(pool, pjmedia_master_port);
     m->options = options;
     m->u_port = u_port;			//null_port
     m->d_port = d_port;			//conference_bridge
 
     
-    /* Create buffer */												//´´½¨»º³åÇø
+    /* Create buffer */												//åˆ›å»ºç¼“å†²åŒº
     m->buff_size = bytes_per_frame;
     m->buff = pj_pool_alloc(pool, m->buff_size);
     if (!m->buff)
@@ -426,7 +426,7 @@ printf("null_port->clock_rate=%d conf_port->clock_rate=%d\n",u_afd->clock_rate,d
     if (status != PJ_SUCCESS)
 		return status;
 
-	/********************ÒôÆµ³õÊ¼»¯ÅäÖÃ********************/
+	/********************éŸ³é¢‘åˆå§‹åŒ–é…ç½®********************/
 	s32Ret = hi35xx_audio_init();
 	if (s32Ret != HI_SUCCESS )	
 	{
@@ -436,7 +436,7 @@ printf("null_port->clock_rate=%d conf_port->clock_rate=%d\n",u_afd->clock_rate,d
 	
 	/*****************************************************/
 
-    /* Create media clock */											//´´½¨Ã½ÌåÊ±ÖÓ»Øµ÷º¯Êı
+    /* Create media clock */											//åˆ›å»ºåª’ä½“æ—¶é’Ÿå›è°ƒå‡½æ•°
     status = pjmedia_clock_create(pool, clock_rate, channel_count, samples_per_frame, options, &clock_callback,m, &m->clock);
     if (status != PJ_SUCCESS) 
 	{
@@ -485,7 +485,7 @@ PJ_DEF(pj_bool_t) pjmedia_master_port_wait( pjmedia_master_port *m,
 }
 
 /*
- * Callback to be called for each clock ticks.		Ê±ÖÓµÎ´ğÊ±²É¼¯ ²¥·ÅÖ¡  ³ÖĞø×°ÔØÖ¡...
+ * Callback to be called for each clock ticks.		æ—¶é’Ÿæ»´ç­”æ—¶é‡‡é›† æ’­æ”¾å¸§  æŒç»­è£…è½½å¸§...
  */
 static void clock_callback(const pj_timestamp *ts, void *user_data)
 {
@@ -499,49 +499,49 @@ static void clock_callback(const pj_timestamp *ts, void *user_data)
     pj_lock_acquire(m->lock);
 
 	
-	//Ìí¼Óº£Ë¼µÄÒôÆµÊäÈë
+	//æ·»åŠ æµ·æ€çš„éŸ³é¢‘è¾“å…¥
 	//							m->u_port = null_port
 	//-------------------------------------------------//
-	//----------------		micÂ¼ÒôÊäÈë		-------------//			null_port===>master_port===>conference_bridge
-    /* Get frame from upstream port and pass it to downstream port */		//´ÓÉÏÁ÷¶Ë¿Ú»ñÈ¡Ö¡  ´«µİ¸øÏÂÁ÷¶Ë¿Ú
+	//----------------		micå½•éŸ³è¾“å…¥		-------------//			null_port===>master_port===>conference_bridge
+    /* Get frame from upstream port and pass it to downstream port */		//ä»ä¸Šæµç«¯å£è·å–å¸§  ä¼ é€’ç»™ä¸‹æµç«¯å£
 
     HI_MPI_AI_ReleaseFrame(AiDev, AiChn,&stFrame, NULL);
 	pj_bzero(&stFrame, sizeof(AUDIO_FRAME_S));
-    if(lance_call_start)		//----ºô½Ğ±êÖ¾Î» confirmÊ±¸ÃÎ»ÖÃÒ»
+    if(lance_call_start)		//----å‘¼å«æ ‡å¿—ä½ confirmæ—¶è¯¥ä½ç½®ä¸€
     		call_start = PJ_TRUE;
-	lance_audio_ai(call_start);		//½«ÒôÆµÊäÈëai ×ªÎª Ö¡µÄĞÎÊ½Êä³ö(ai-->frame)
+	lance_audio_ai(call_start);		//å°†éŸ³é¢‘è¾“å…¥ai è½¬ä¸º å¸§çš„å½¢å¼è¾“å‡º(ai-->frame)
 	
-    pj_bzero(&frame, sizeof(frame));				//ÇåÁã¿Õ¼ä      
+    pj_bzero(&frame, sizeof(frame));				//æ¸…é›¶ç©ºé—´      
     frame.buf = &sendframebuf;	
-    frame.size = m->buff_size;					//---Ö»ÄÜ320
+    frame.size = m->buff_size;					//---åªèƒ½320
     frame.timestamp.u64 = ts->u64;
 	frame.type =PJMEDIA_FRAME_TYPE_AUDIO;
 	if(sizeof(frame.buf)==0)
 		frame.type = PJMEDIA_FRAME_TYPE_NONE;
-    status = pjmedia_port_put_frame(m->d_port, &frame);				//ÍùÏÂÓÎconference_bridge¹àÈëÖ¡
+    status = pjmedia_port_put_frame(m->d_port, &frame);				//å¾€ä¸‹æ¸¸conference_bridgeçŒå…¥å¸§
 
 
-	//Ìí¼Óº£Ë¼µÄÒôÆµ²¥·Å
+	//æ·»åŠ æµ·æ€çš„éŸ³é¢‘æ’­æ”¾
 	//							m->d_port = conference_bridge
 	//-------------------------------------------------//		
-	//----------------		spkÓïÒôÊä³ö		-------------//					null_port===>master_port===>conference_bridge
-    /* Get frame from downstream port and pass it to upstream port */		//´ÓÏÂÓÎ¶Ë¿Ú»ñÈ¡Ö¡  ´«µİ¸øÉÏÓÎ¶Ë¿Ú
+	//----------------		spkè¯­éŸ³è¾“å‡º		-------------//					null_port===>master_port===>conference_bridge
+    /* Get frame from downstream port and pass it to upstream port */		//ä»ä¸‹æ¸¸ç«¯å£è·å–å¸§  ä¼ é€’ç»™ä¸Šæ¸¸ç«¯å£
 
     pj_bzero(&frame, sizeof(frame));
     frame.buf = m->buff;				
     frame.size = m->buff_size;
     frame.timestamp.u64 = ts->u64;
 
-    status = pjmedia_port_get_frame(m->d_port, &frame);				//´ÓÏÂÓÎconference_bridge»ñÈ¡Ö¡
+    status = pjmedia_port_get_frame(m->d_port, &frame);				//ä»ä¸‹æ¸¸conference_bridgeè·å–å¸§
     if (status != PJ_SUCCESS)
 		frame.type = PJMEDIA_FRAME_TYPE_NONE;
 	
 	//if(0)
-	if(call_start)		//----ºô½Ğ±êÖ¾Î» confirmÊ±¸ÃÎ»ÖÃÒ»
+	if(call_start)		//----å‘¼å«æ ‡å¿—ä½ confirmæ—¶è¯¥ä½ç½®ä¸€
 	{
 		stFrame.pVirAddr[0]=frame.buf;
 		HI_MPI_AO_SendFrame(AoDev,AoChn,&stFrame, HI_TRUE);
-    	//status = pjmedia_port_put_frame(m->u_port, &frame);				//ÏòÉÏÓÎnull_port¹àÈëÖ¡
+    	//status = pjmedia_port_put_frame(m->u_port, &frame);				//å‘ä¸Šæ¸¸null_portçŒå…¥å¸§
 	}
 	HI_MPI_AI_ReleaseFrame(AiDev, AiChn,&stFrame, NULL);
     /* Release lock */
@@ -661,6 +661,7 @@ PJ_DEF(pj_status_t) pjmedia_master_port_destroy(pjmedia_master_port *m,
 	pj_lock_destroy(m->lock);
 	m->lock = NULL;
     }
+
 
     return PJ_SUCCESS;
 }

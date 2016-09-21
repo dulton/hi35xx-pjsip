@@ -23,7 +23,6 @@
 #include <hi_inc/hi35xx_audio.h>
 
 
-
 #define THIS_FILE	"pjsua_app.c"
 
 //#define STEREO_DEMO
@@ -145,20 +144,20 @@ static void ring_stop(pjsua_call_id call_id)
     if (app_config.no_tones)
 		return;
 
-    if (app_config.call_data[call_id].ringback_on) 		//»ØÁåÉù
+    if (app_config.call_data[call_id].ringback_on) 		//å›é“ƒå£°
 	{
-		app_config.call_data[call_id].ringback_on = PJ_FALSE;			//Çå±êÖ¾
+		app_config.call_data[call_id].ringback_on = PJ_FALSE;			//æ¸…æ ‡å¿—
 
-		pj_assert(app_config.ringback_cnt>0);								//¶ÏÑÔÊıÄ¿¶àÓÚ0¸ö
+		pj_assert(app_config.ringback_cnt>0);								//æ–­è¨€æ•°ç›®å¤šäº0ä¸ª
 		if (--app_config.ringback_cnt == 0 && 
 		    app_config.ringback_slot!=PJSUA_INVALID_ID) 
 		{
-		    pjsua_conf_disconnect(app_config.ringback_slot, 0);		//¶Ï¿ªÔ´µ½Ä¿µÄ¶Ë¿ÚµÄÃ½ÌåÁ÷
-		    pjmedia_tonegen_rewind(app_config.ringback_port);			//Ìøµ½²¥·ÅÁĞ±íÍ·»Ø·Å
+		    pjsua_conf_disconnect(app_config.ringback_slot, 0);		//æ–­å¼€æºåˆ°ç›®çš„ç«¯å£çš„åª’ä½“æµ
+		    pjmedia_tonegen_rewind(app_config.ringback_port);			//è·³åˆ°æ’­æ”¾åˆ—è¡¨å¤´å›æ”¾
 		}
     }
 
-    if (app_config.call_data[call_id].ring_on) 			//°´Áå
+    if (app_config.call_data[call_id].ring_on) 			//æŒ‰é“ƒ
 	{
 		app_config.call_data[call_id].ring_on = PJ_FALSE;
 
@@ -166,18 +165,18 @@ static void ring_stop(pjsua_call_id call_id)
 		if (--app_config.ring_cnt == 0 && 
 		    app_config.ring_slot!=PJSUA_INVALID_ID) 
 		{
-		    pjsua_conf_disconnect(app_config.ring_slot, 0);				//¶Ï¿ªÔ´µ½Ä¿µÄ¶Ë¿ÚµÄÃ½ÌåÁ÷
-		    pjmedia_tonegen_rewind(app_config.ring_port);				//Ìøµ½²¥·ÅÁĞ±íÍ·»Ø·Å
+		    pjsua_conf_disconnect(app_config.ring_slot, 0);				//æ–­å¼€æºåˆ°ç›®çš„ç«¯å£çš„åª’ä½“æµ
+		    pjmedia_tonegen_rewind(app_config.ring_port);				//è·³åˆ°æ’­æ”¾åˆ—è¡¨å¤´å›æ”¾
 		}
     }
 }
 
 static void ring_start(pjsua_call_id call_id)
 {
-    if (app_config.no_tones)							//¾²ÒôÄ£Ê½
+    if (app_config.no_tones)							//é™éŸ³æ¨¡å¼
 		return;
 
-    if (app_config.call_data[call_id].ring_on)	//ÒÑÉèÖÃ
+    if (app_config.call_data[call_id].ring_on)	//å·²è®¾ç½®
 		return;
 
     app_config.call_data[call_id].ring_on = PJ_TRUE;
@@ -185,7 +184,7 @@ static void ring_start(pjsua_call_id call_id)
     if (++app_config.ring_cnt==1 && 
 	app_config.ring_slot!=PJSUA_INVALID_ID) 
     {
-		pjsua_conf_connect(app_config.ring_slot, 0);	//ÊäÈëÏìÁåÉùÒô?
+		pjsua_conf_connect(app_config.ring_slot, 0);	//è¾“å…¥å“é“ƒå£°éŸ³?
     }
 }
 
@@ -222,7 +221,7 @@ static void call_timeout_callback(pj_timer_heap_t *timer_heap,
 }
 
 /*
- * Handler when invite state has changed.		ÑûÇë×´Ì¬¸Ä±äÊ±£¬
+ * Handler when invite state has changed.		é‚€è¯·çŠ¶æ€æ”¹å˜æ—¶ï¼Œ
  */
 static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 {
@@ -230,11 +229,11 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 
     PJ_UNUSED_ARG(e);
 
-    pjsua_call_get_info(call_id, &call_info);				//»ñÈ¡call_idµÄÏ¸½ÚĞÅÏ¢
+    pjsua_call_get_info(call_id, &call_info);				//è·å–call_idçš„ç»†èŠ‚ä¿¡æ¯
 
     if (call_info.state == PJSIP_INV_STATE_DISCONNECTED) {
 
-	/* Stop all ringback for this call */					//Í£Ö¹ËùÓĞ¶ş´ÎÏìÁå
+	/* Stop all ringback for this call */					//åœæ­¢æ‰€æœ‰äºŒæ¬¡å“é“ƒ
 	ring_stop(call_id);	
 
 	/* Cancel duration timer, if any */
@@ -247,7 +246,7 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 	    pjsip_endpt_cancel_timer(endpt, &cd->timer);
 	}
 
-	/* Rewind play file when hangup automatically, 		µ±¹ÒÆğµÄÊ±ºò×Ô¶¯»Ø·ÅÎÄ¼ş
+	/* Rewind play file when hangup automatically, 		å½“æŒ‚èµ·çš„æ—¶å€™è‡ªåŠ¨å›æ”¾æ–‡ä»¶
 	 * since file is not looped
 	 */
 	if (app_config.auto_play_hangup)
@@ -257,9 +256,9 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 	PJ_LOG(3,(THIS_FILE, "Call %d is DISCONNECTED [reason=%d (%s)]", 
 		  call_id,
 		  call_info.last_status,
-		  call_info.last_status_text.ptr));			//´òÓ¡³ö¶Ï¿ªµÄIDºÅ 
+		  call_info.last_status_text.ptr));			//æ‰“å°å‡ºæ–­å¼€çš„IDå· 
 
-	if (call_id == current_call) 						//µ±Ç°»á»°¹Ò¶Ï»ò°´ÁË"]"Ê±  µ÷ÓÃ
+	if (call_id == current_call) 						//å½“å‰ä¼šè¯æŒ‚æ–­æˆ–æŒ‰äº†"]"æ—¶  è°ƒç”¨
 	{
 	    find_next_call();
 	}
@@ -269,7 +268,7 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 	    PJ_LOG(5,(THIS_FILE, 
 		      "Call %d disconnected, dumping media stats..", 
 		      call_id));
-	    log_call_dump(call_id);			//Ïú»ÙÊı¾İ?	    
+	    log_call_dump(call_id);			//é”€æ¯æ•°æ®?	    
 		lance_call_start = 0;
 	}
 
@@ -277,15 +276,15 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 	else {
 
 	if (app_config.duration != PJSUA_APP_NO_LIMIT_DURATION && 
-	    call_info.state == PJSIP_INV_STATE_CONFIRMED) 				//×´Ì¬È·ÈÏ?
+	    call_info.state == PJSIP_INV_STATE_CONFIRMED) 				//çŠ¶æ€ç¡®è®¤?
 	{
-	    /* Schedule timer to hangup call after the specified duration */		//ÔÚÒ»¶¨ÖÜÆÚºó °²ÅÅ¶¨Ê±Æ÷¹Ò¶Ïºô½Ğ
+	    /* Schedule timer to hangup call after the specified duration */		//åœ¨ä¸€å®šå‘¨æœŸå å®‰æ’å®šæ—¶å™¨æŒ‚æ–­å‘¼å«
 	    app_call_data *cd = &app_config.call_data[call_id];
 	    pjsip_endpoint *endpt = pjsua_get_pjsip_endpt();
 	    pj_time_val delay;
 		
 	    cd->timer.id = call_id;
-	    delay.sec = app_config.duration;						//³ÖĞøÊ±¼ä
+	    delay.sec = app_config.duration;						//æŒç»­æ—¶é—´
 	    delay.msec = 0;
 	    pjsip_endpt_schedule_timer(endpt, &cd->timer, &delay);
 	}
@@ -295,7 +294,7 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 	    pj_str_t reason;
 	    pjsip_msg *msg;
 
-	    /* This can only occur because of TX or RX message */		//½ÓÊÕ¡¢·¢ËÍĞÅÏ¢Ê±²Å·¢Éú
+	    /* This can only occur because of TX or RX message */		//æ¥æ”¶ã€å‘é€ä¿¡æ¯æ—¶æ‰å‘ç”Ÿ
 	    pj_assert(e->type == PJSIP_EVENT_TSX_STATE);
 
 	    if (e->body.tsx_state.type == PJSIP_EVENT_RX_MSG) {
@@ -341,7 +340,7 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e)
 }
 
 /**
- * Handler when there is incoming call.		//À´µç»Øµ÷º¯Êı 
+ * Handler when there is incoming call.		//æ¥ç”µå›è°ƒå‡½æ•° 
  */
 static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
 			     pjsip_rx_data *rdata)
@@ -351,7 +350,7 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
     PJ_UNUSED_ARG(acc_id);
     PJ_UNUSED_ARG(rdata);
 
-    pjsua_call_get_info(call_id, &call_info);		//»ñÈ¡ºô½ĞĞÅÏ¢
+    pjsua_call_get_info(call_id, &call_info);		//è·å–å‘¼å«ä¿¡æ¯
 
     if (current_call==PJSUA_INVALID_ID)
 		current_call = call_id;
@@ -362,13 +361,13 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
 #endif
 
     /* Start ringback */
-    ring_start(call_id);			//Æô¶¯¶ş´ÎÏìÁå
+    ring_start(call_id);			//å¯åŠ¨äºŒæ¬¡å“é“ƒ
     
     if (app_config.auto_answer > 0) 
 	{
 		pjsua_call_setting opt;
 
-		pjsua_call_setting_default(&opt);			//³õÊ¼»¯ºô½ĞÉèÖÃ
+		pjsua_call_setting_default(&opt);			//åˆå§‹åŒ–å‘¼å«è®¾ç½®
 		opt.aud_cnt = app_config.aud_cnt;
 		opt.vid_cnt = app_config.vid.vid_cnt;
 
@@ -381,7 +380,7 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id,
 		char notif_st[80] = {0};
 
 #if PJSUA_HAS_VIDEO
-		if (call_info.rem_offerer && call_info.rem_vid_cnt) 		//ÓĞÊÓÆµ sdp ÊÓÆµÊı
+		if (call_info.rem_offerer && call_info.rem_vid_cnt) 		//æœ‰è§†é¢‘ sdp è§†é¢‘æ•°
 		{
 		    snprintf(notif_st, sizeof(notif_st), 
 			     "To %s the video, type \"vid %s\" first, "
@@ -517,7 +516,7 @@ static void on_call_generic_media_state(pjsua_call_info *ci, unsigned mi,
 //null-audio---->08:08:29.787	pjsua_app.c  .....Call 0 media 0 [type=audio], status is Active
     PJ_LOG(4,(THIS_FILE, "Call %d media %d [type=%s], status is %s",
 	      ci->id, mi, pjmedia_type_name(ci->media[mi].type),
-	      status_name[ci->media[mi].status]));		//´òÓ¡³öÃ½ÌåIDºÅ Ë÷Òı ÀàĞÍ ×´Ì¬ 
+	      status_name[ci->media[mi].status]));		//æ‰“å°å‡ºåª’ä½“IDå· ç´¢å¼• ç±»å‹ çŠ¶æ€ 
 }
 
 /* Process audio media state. "mi" is the media index. */		//
@@ -527,10 +526,10 @@ static void on_call_audio_state(pjsua_call_info *ci, unsigned mi,
     PJ_UNUSED_ARG(has_error);
 
     /* Stop ringback */
-    ring_stop(ci->id);				//½áÊøÏìÁå
+    ring_stop(ci->id);				//ç»“æŸå“é“ƒ
 
     /* Connect ports appropriately when media status is ACTIVE or REMOTE HOLD,
-     * otherwise we should NOT connect the ports.			Ã½Ìå×´Ì¬ÊÇACTIVE»òREMOTE HOLDÊ±£¬Á¬½Ó¶Ë¿Ú
+     * otherwise we should NOT connect the ports.			åª’ä½“çŠ¶æ€æ˜¯ACTIVEæˆ–REMOTE HOLDæ—¶ï¼Œè¿æ¥ç«¯å£
      */
     if (ci->media[mi].status == PJSUA_CALL_MEDIA_ACTIVE ||
 	ci->media[mi].status == PJSUA_CALL_MEDIA_REMOTE_HOLD)
@@ -539,22 +538,22 @@ static void on_call_audio_state(pjsua_call_info *ci, unsigned mi,
 	pj_bool_t disconnect_mic = PJ_FALSE;
 	pjsua_conf_port_id call_conf_slot;
 
-	call_conf_slot = ci->media[mi].stream.aud.conf_slot;			//ºô½ĞµÄ»Ø»°¶Ë¿ÚºÅ
+	call_conf_slot = ci->media[mi].stream.aud.conf_slot;			//å‘¼å«çš„å›è¯ç«¯å£å·
 
 	/* Loopback sound, if desired */
-	if (app_config.auto_loop) {														//±¾µØ»·»Ø
-	    pjsua_conf_connect(call_conf_slot, call_conf_slot);							//ÏàÍ¬IDºÅ
+	if (app_config.auto_loop) {														//æœ¬åœ°ç¯å›
+	    pjsua_conf_connect(call_conf_slot, call_conf_slot);							//ç›¸åŒIDå·
 	    connect_sound = PJ_FALSE;
 	}
 
 	/* Automatically record conversation, if desired */
-	if (app_config.auto_rec && app_config.rec_port != PJSUA_INVALID_ID) {		//×Ô¶¯»á»°Â¼Òô
+	if (app_config.auto_rec && app_config.rec_port != PJSUA_INVALID_ID) {		//è‡ªåŠ¨ä¼šè¯å½•éŸ³
 	    pjsua_conf_connect(call_conf_slot, app_config.rec_port);
 	}
 
 	/* Stream a file, if desired */
 	if ((app_config.auto_play || app_config.auto_play_hangup) && 
-	    app_config.wav_port != PJSUA_INVALID_ID)										//±£´æÎªÎÄ¼ş
+	    app_config.wav_port != PJSUA_INVALID_ID)										//ä¿å­˜ä¸ºæ–‡ä»¶
 	{
 	    pjsua_conf_connect(app_config.wav_port, call_conf_slot);
 	    connect_sound = PJ_FALSE;
@@ -563,7 +562,7 @@ static void on_call_audio_state(pjsua_call_info *ci, unsigned mi,
 	/* Stream AVI, if desired */
 	if (app_config.avi_auto_play &&
 	    app_config.avi_def_idx != PJSUA_INVALID_ID &&
-	    app_config.avi[app_config.avi_def_idx].slot != PJSUA_INVALID_ID)		//±£´æÎªAVI¸ñÊ½
+	    app_config.avi[app_config.avi_def_idx].slot != PJSUA_INVALID_ID)		//ä¿å­˜ä¸ºAVIæ ¼å¼
 	{
 	    pjsua_conf_connect(app_config.avi[app_config.avi_def_idx].slot,
 			       call_conf_slot);
@@ -571,30 +570,30 @@ static void on_call_audio_state(pjsua_call_info *ci, unsigned mi,
 	}
 
 	/* Put call in conference with other calls, if desired */			
-	if (app_config.auto_conf) {														//½«ºô½Ğ¼ÓÈëÈºÌå»á»°(ÈºÁÄÄ£Ê½?)
+	if (app_config.auto_conf) {														//å°†å‘¼å«åŠ å…¥ç¾¤ä½“ä¼šè¯(ç¾¤èŠæ¨¡å¼?)
 	    pjsua_call_id call_ids[PJSUA_MAX_CALLS];
 	    unsigned call_cnt=PJ_ARRAY_SIZE(call_ids);
 	    unsigned i;
 
-	    /* Get all calls, and establish media connection between				»ñÈ¡ËùÓĞºô½Ğ£¬ÔÚÕâºô½Ğ¸úÆäËüÕßÖ®¼ä½¨Á¢Á¬½Ó
+	    /* Get all calls, and establish media connection between				è·å–æ‰€æœ‰å‘¼å«ï¼Œåœ¨è¿™å‘¼å«è·Ÿå…¶å®ƒè€…ä¹‹é—´å»ºç«‹è¿æ¥
 	     * this call and other calls.
 	     */
 	    pjsua_enum_calls(call_ids, &call_cnt);
 
 	    for (i=0; i<call_cnt; ++i) 
 		{
-			if (call_ids[i] == ci->id)						//ºô½ĞID³åÍ»
+			if (call_ids[i] == ci->id)						//å‘¼å«IDå†²çª
 			    continue;
 			
-			if (!pjsua_call_has_media(call_ids[i]))	//ºô½Ğ	ÓĞ»îÔ¾µÄÃ½Ìå»á»°==1  
+			if (!pjsua_call_has_media(call_ids[i]))	//å‘¼å«	æœ‰æ´»è·ƒçš„åª’ä½“ä¼šè¯==1  
 			    continue;		
 
 			pjsua_conf_connect(call_conf_slot,
-					   pjsua_call_get_conf_port(call_ids[i]));		//·µ»Ø»á»°¶Ë¿ÚID
+					   pjsua_call_get_conf_port(call_ids[i]));		//è¿”å›ä¼šè¯ç«¯å£ID
 			pjsua_conf_connect(pjsua_call_get_conf_port(call_ids[i]),
 			                   call_conf_slot);
 
-			/* Automatically record conversation, if desired */		//×Ô¶¯»á»°Â¼Òô
+			/* Automatically record conversation, if desired */		//è‡ªåŠ¨ä¼šè¯å½•éŸ³
 			if (app_config.auto_rec && app_config.rec_port !=
 						   PJSUA_INVALID_ID)
 			{
@@ -604,18 +603,18 @@ static void on_call_audio_state(pjsua_call_info *ci, unsigned mi,
 
 	    }
 
-	    /* Also connect call to local sound device */					//Ò²½«ºô½ĞÁ¬½Óµ½±¾µØÒôÆµÉè±¸
+	    /* Also connect call to local sound device */					//ä¹Ÿå°†å‘¼å«è¿æ¥åˆ°æœ¬åœ°éŸ³é¢‘è®¾å¤‡
 	    connect_sound = PJ_TRUE;
 	}
 
-	/* Otherwise connect to sound device */									//Ä¬ÈÏ½«ºô½ĞÁ¬½Óµ½±¾µØÒôÆµÉè±¸
+	/* Otherwise connect to sound device */									//é»˜è®¤å°†å‘¼å«è¿æ¥åˆ°æœ¬åœ°éŸ³é¢‘è®¾å¤‡
 	if (connect_sound) 
 	{
 	    pjsua_conf_connect(call_conf_slot, 0);
 	    if (!disconnect_mic)
-			pjsua_conf_connect(0, call_conf_slot);			//¾²Òô---0ÊäÈë
+			pjsua_conf_connect(0, call_conf_slot);			//é™éŸ³---0è¾“å…¥
 
-	    /* Automatically record conversation, if desired */						//×Ô¶¯»á»°Â¼Òô
+	    /* Automatically record conversation, if desired */						//è‡ªåŠ¨ä¼šè¯å½•éŸ³
 	    if (app_config.auto_rec && app_config.rec_port != PJSUA_INVALID_ID)
 	    {
 			pjsua_conf_connect(call_conf_slot, app_config.rec_port);
@@ -633,7 +632,7 @@ static void on_call_video_state(pjsua_call_info *ci, unsigned mi,
     if (ci->media_status != PJSUA_CALL_MEDIA_ACTIVE)
 	return;
 
-    arrange_window(ci->media[mi].stream.vid.win_in);		//ÖØÅÅ´°¿Ú
+    arrange_window(ci->media[mi].stream.vid.win_in);		//é‡æ’çª—å£
 
     PJ_UNUSED_ARG(has_error);
 }
@@ -653,14 +652,14 @@ static void on_call_media_state(pjsua_call_id call_id)
 
     for (mi=0; mi<call_info.media_cnt; ++mi) 
 	{
-		on_call_generic_media_state(&call_info, mi, &has_error);		//»ñÈ¡Ã½ÌåIDºÅ Ë÷Òı ÀàĞÍ ×´Ì¬ 
+		on_call_generic_media_state(&call_info, mi, &has_error);		//è·å–åª’ä½“IDå· ç´¢å¼• ç±»å‹ çŠ¶æ€ 
 
-		switch (call_info.media[mi].type) 			//Ã½ÌåÀàĞÍ
+		switch (call_info.media[mi].type) 			//åª’ä½“ç±»å‹
 		{
-			case PJMEDIA_TYPE_AUDIO:						//´¦ÀíÒôÆµ×´Ì¬---»·»Ø¡¢×Ô¶¯»á»°Â¼Òô¡¢±£´æÎªÎÄ¼ş¡¢±£´æÎªAVI¡¢¼ÓÈëÈºÁÄ
+			case PJMEDIA_TYPE_AUDIO:						//å¤„ç†éŸ³é¢‘çŠ¶æ€---ç¯å›ã€è‡ªåŠ¨ä¼šè¯å½•éŸ³ã€ä¿å­˜ä¸ºæ–‡ä»¶ã€ä¿å­˜ä¸ºAVIã€åŠ å…¥ç¾¤èŠ
 			    on_call_audio_state(&call_info, mi, &has_error);			
 			    break;
-			case PJMEDIA_TYPE_VIDEO:						//´¦ÀíÊÓÆµ×´Ì¬---
+			case PJMEDIA_TYPE_VIDEO:						//å¤„ç†è§†é¢‘çŠ¶æ€---
 			    on_call_video_state(&call_info, mi, &has_error);
 			    break;
 			default:
@@ -677,12 +676,12 @@ static void on_call_media_state(pjsua_call_id call_id)
 
 #if PJSUA_HAS_VIDEO
     /* Check if remote has just tried to enable video */
-    if (call_info.rem_offerer && call_info.rem_vid_cnt)				//SDP¼°ÊÓÆµÁ÷
+    if (call_info.rem_offerer && call_info.rem_vid_cnt)				//SDPåŠè§†é¢‘æµ
     {
 		int vid_idx;
 
 		/* Check if there is active video */
-		vid_idx = pjsua_call_get_vid_stream_idx(call_id);		//»ñÈ¡ÊÓÆµ
+		vid_idx = pjsua_call_get_vid_stream_idx(call_id);		//è·å–è§†é¢‘
 		if (vid_idx == -1 || call_info.media[vid_idx].dir == PJMEDIA_DIR_NONE) 
 		{
 		    PJ_LOG(3,(THIS_FILE,
@@ -1038,7 +1037,7 @@ static void on_ice_transport_error(int index, pj_ice_strans_op op,
 }
 
 /*
- * Notification on sound device operation.		Í¨ÖªÒôÆµÉè±¸²Ù×÷
+ * Notification on sound device operation.		é€šçŸ¥éŸ³é¢‘è®¾å¤‡æ“ä½œ
  */
 static pj_status_t on_snd_dev_operation(int operation)
 {
@@ -1314,15 +1313,15 @@ static pjsip_module mod_default_handler =
 void cli_on_started(pj_status_t status)
 {
     /* Notify app */
-    if (app_cfg.on_started) 		//ÊÇ·ñÆô¶¯?
+    if (app_cfg.on_started) 		//æ˜¯å¦å¯åŠ¨?
 	{
 		if (status == PJ_SUCCESS) 
 		{
 		    char info[128];
-		    cli_get_info(info, sizeof(info));		//¿Í»§¶Ë»ñÈ¡ĞÅÏ¢
+		    cli_get_info(info, sizeof(info));		//å®¢æˆ·ç«¯è·å–ä¿¡æ¯
 		    if (app_cfg.on_started) 
 			{
-				(*app_cfg.on_started)(status, info);		//ÔÙ´ÎÈ·ÈÏ	
+				(*app_cfg.on_started)(status, info);		//å†æ¬¡ç¡®è®¤	
 		    } 
 		} 
 		else 
@@ -1385,18 +1384,18 @@ static pj_status_t app_init()
     pj_pool_t *tmp_pool;
     pj_status_t status;
 
-//ÉêÇëpjsua
+//ç”³è¯·pjsua
     /** Create pjsua **/
     status = pjsua_create();
     if (status != PJ_SUCCESS)
 		return status;
 
-//ÉêÇë»º³å³Ø
+//ç”³è¯·ç¼“å†²æ± 
     /* Create pool for application */
     app_config.pool = pjsua_pool_create("pjsua-app", 1000, 1000);
     tmp_pool = pjsua_pool_create("tmp-pjsua", 1000, 1000);;
 
-//³õÊ¼»¯¿Í»§¶Ë&
+//åˆå§‹åŒ–å®¢æˆ·ç«¯&
     /* Init CLI & its FE settings */
     if (!app_running) 
 	{
@@ -1407,17 +1406,17 @@ static pj_status_t app_init()
     }
 
     /** Parse args **/
-    status = load_config(app_cfg.argc, app_cfg.argv, &uri_arg);		//¼ÓÔØÅäÖÃ
+    status = load_config(app_cfg.argc, app_cfg.argv, &uri_arg);		//åŠ è½½é…ç½®
     if (status != PJ_SUCCESS) 
 	{
 		pj_pool_release(tmp_pool);
 		return status;
     }
 
-    /* Initialize application callbacks */		//³õÊ¼»¯Ó¦ÓÃµÄ»Øµ÷º¯Êı
+    /* Initialize application callbacks */		//åˆå§‹åŒ–åº”ç”¨çš„å›è°ƒå‡½æ•°
     app_config.cfg.cb.on_call_state = &on_call_state;
-    app_config.cfg.cb.on_call_media_state = &on_call_media_state;			//´¦ÀíÃ½Ìå×´Ì¬
-    app_config.cfg.cb.on_incoming_call = &on_incoming_call;					//À´µç
+    app_config.cfg.cb.on_call_media_state = &on_call_media_state;			//å¤„ç†åª’ä½“çŠ¶æ€
+    app_config.cfg.cb.on_incoming_call = &on_incoming_call;					//æ¥ç”µ
     app_config.cfg.cb.on_call_tsx_state = &on_call_tsx_state;
     app_config.cfg.cb.on_dtmf_digit = &call_on_dtmf_callback;
     app_config.cfg.cb.on_call_redirected = &call_on_redirected;
@@ -1439,7 +1438,7 @@ static pj_status_t app_init()
     app_config.cfg.cb.on_create_media_transport = &on_create_media_transport;
 #endif
 
-    /* Set sound device latency */			//ÑÓ³Ù·¢ËÍÒôÆµÉè±¸
+    /* Set sound device latency */			//å»¶è¿Ÿå‘é€éŸ³é¢‘è®¾å¤‡
     if (app_config.capture_lat > 0)
 		app_config.media_cfg.snd_rec_latency = app_config.capture_lat;
 
@@ -1450,7 +1449,7 @@ static pj_status_t app_init()
 		(*app_cfg.on_config_init)(&app_config);
 
 
-    /* Initialize pjsua */				//³õÊ¼»¯pjsua
+    /* Initialize pjsua */				//åˆå§‹åŒ–pjsua
     status = pjsua_init(&app_config.cfg, &app_config.log_cfg,&app_config.media_cfg);
     if (status != PJ_SUCCESS) 
 	{
@@ -1458,7 +1457,7 @@ static pj_status_t app_init()
 		return status;
     }
 
-    /* Initialize our module to handle otherwise unhandled request */		//³õÊ¼»¯ÇëÇó´¦ÀíÄ£¿é
+    /* Initialize our module to handle otherwise unhandled request */		//åˆå§‹åŒ–è¯·æ±‚å¤„ç†æ¨¡å—
     status = pjsip_endpt_register_module(pjsua_get_pjsip_endpt(),&mod_default_handler);
     if (status != PJ_SUCCESS)
 		return status;
@@ -1467,14 +1466,14 @@ static pj_status_t app_init()
     stereo_demo();
 #endif
 
-    /* Initialize calls data */			//³õÊ¼»¯ºô½ĞÊı¾İ
+    /* Initialize calls data */			//åˆå§‹åŒ–å‘¼å«æ•°æ®
     for (i=0; i<PJ_ARRAY_SIZE(app_config.call_data); ++i) 
 	{
-		app_config.call_data[i].timer.id = PJSUA_INVALID_ID;				//Í¨¹ıIDÇø·ÖÏàÍ¬»Øµ÷º¯Êı¼°ÓÃ»§Êı¾İµÄ¶à¸ö¶¨Ê±Æ÷¼ÇÂ¼
-		app_config.call_data[i].timer.cb = &call_timeout_callback;	//×î´óºô½Ğ³ÖĞøÊ±¼ä
+		app_config.call_data[i].timer.id = PJSUA_INVALID_ID;				//é€šè¿‡IDåŒºåˆ†ç›¸åŒå›è°ƒå‡½æ•°åŠç”¨æˆ·æ•°æ®çš„å¤šä¸ªå®šæ—¶å™¨è®°å½•
+		app_config.call_data[i].timer.cb = &call_timeout_callback;	//æœ€å¤§å‘¼å«æŒç»­æ—¶é—´
     }
 
-    /* Optionally registers WAV file */  			//°´Ğè×¢²áÒôÆµÎÄ¼ş
+    /* Optionally registers WAV file */  			//æŒ‰éœ€æ³¨å†ŒéŸ³é¢‘æ–‡ä»¶
     for (i=0; i<app_config.wav_count; ++i) 
 	{
 		pjsua_player_id wav_id;
@@ -1483,15 +1482,15 @@ static pj_status_t app_init()
 		if (app_config.auto_play_hangup)
 	    	play_options |= PJMEDIA_FILE_NO_LOOP;
 
-		status = pjsua_player_create(&app_config.wav_files[i], play_options, &wav_id);		//´´½¨²¥·ÅÎÄ¼ş
+		status = pjsua_player_create(&app_config.wav_files[i], play_options, &wav_id);		//åˆ›å»ºæ’­æ”¾æ–‡ä»¶
 		if (status != PJ_SUCCESS)
 	    	goto on_error;
 
-		if (app_config.wav_id == PJSUA_INVALID_ID) 		//ÎÄ¼ş´æÔÚ
+		if (app_config.wav_id == PJSUA_INVALID_ID) 		//æ–‡ä»¶å­˜åœ¨
 		{
-		    app_config.wav_id = wav_id;						//½«»ñÈ¡µÄIDÌî³ä
+		    app_config.wav_id = wav_id;						//å°†è·å–çš„IDå¡«å……
 		    app_config.wav_port = pjsua_player_get_conf_port(app_config.wav_id);
-		    if (app_config.auto_play_hangup) 				//¶¨Òå×Ô¶¯¹Ò¶Ï
+		    if (app_config.auto_play_hangup) 				//å®šä¹‰è‡ªåŠ¨æŒ‚æ–­
 			{
 				pjmedia_port *port;
 
@@ -1505,7 +1504,7 @@ static pj_status_t app_init()
 		}
     }
 
-    /* Optionally registers tone players */			//Òôµ÷²¥·ÅÆ÷
+    /* Optionally registers tone players */			//éŸ³è°ƒæ’­æ”¾å™¨
     for (i=0; i<app_config.tone_count; ++i) 
 	{
 		pjmedia_port *tport;
@@ -1534,19 +1533,19 @@ static pj_status_t app_init()
 		pj_assert(status2 == PJ_SUCCESS);
     }
 
-    /* Optionally create recorder file, if any. */			//°´Ğè ´´½¨Â¼ÒôÎÄ¼ş
+    /* Optionally create recorder file, if any. */			//æŒ‰éœ€ åˆ›å»ºå½•éŸ³æ–‡ä»¶
     if (app_config.rec_file.slen) 
 	{
 		status = pjsua_recorder_create(&app_config.rec_file, 0, NULL, 0, 0,&app_config.rec_id);
 		if (status != PJ_SUCCESS)
 	    	goto on_error;
 
-		app_config.rec_port = pjsua_recorder_get_conf_port(app_config.rec_id);		//Â¼Òô½Ó¿Ú
+		app_config.rec_port = pjsua_recorder_get_conf_port(app_config.rec_id);		//å½•éŸ³æ¥å£
     }
 
     pj_memcpy(&tcp_cfg, &app_config.udp_cfg, sizeof(tcp_cfg));
 
-    /* Create ringback tones */						//´´½¨»ØÁåÉù
+    /* Create ringback tones */						//åˆ›å»ºå›é“ƒå£°
     if (app_config.no_tones == PJ_FALSE) 
 	{
 		unsigned samples_per_frame;
@@ -1697,7 +1696,7 @@ static pj_status_t app_init()
     }
 //////////end avi_cnt
 
-    /* Add UDP transport unless it's disabled. */		//Ìí¼ÓUDP´«Êä¿Ú------Ö±½ÓÊ¹ÓÃ!!!
+    /* Add UDP transport unless it's disabled. */		//æ·»åŠ UDPä¼ è¾“å£------ç›´æ¥ä½¿ç”¨!!!
     if (!app_config.no_udp) 
 	{
 		pjsua_acc_id aid;
@@ -1709,10 +1708,10 @@ static pj_status_t app_init()
 		if (status != PJ_SUCCESS)
 		    goto on_error;
 
-		/* Add local account */			//Ìí¼Ó±¾µØÕË»§
+		/* Add local account */			//æ·»åŠ æœ¬åœ°è´¦æˆ·
 		pjsua_acc_add_local(transport_id, PJ_TRUE, &aid);
 
-		/* Adjust local account config based on pjsua app config */		//¸ù¾İpjsuaÓ¦ÓÃÅäÖÃµ÷Õû±¾µØÕË»§ÅäÖÃ
+		/* Adjust local account config based on pjsua app config */		//æ ¹æ®pjsuaåº”ç”¨é…ç½®è°ƒæ•´æœ¬åœ°è´¦æˆ·é…ç½®
 		{
 		    pjsua_acc_config acc_cfg;
 		    pjsua_acc_get_config(aid, tmp_pool, &acc_cfg);
@@ -1737,7 +1736,7 @@ static pj_status_t app_init()
 		}
     }
 ////////////////////////////////////////////////////////////////////////////////
-    /* Add UDP IPv6 transport unless it's disabled. */		//Ìí¼ÓIPv6´«Êä¿Ú
+    /* Add UDP IPv6 transport unless it's disabled. */		//æ·»åŠ IPv6ä¼ è¾“å£
     if (!app_config.no_udp && app_config.ipv6) 
 	{
 		pjsua_acc_id aid;
@@ -1781,7 +1780,7 @@ static pj_status_t app_init()
 		}
     }
 
-    /* Add TCP transport unless it's disabled */			//Ìí¼ÓTCP´«Êä¿Ú
+    /* Add TCP transport unless it's disabled */			//æ·»åŠ TCPä¼ è¾“å£
     if (!app_config.no_tcp) 
 	{
 		pjsua_acc_id aid;
@@ -1809,7 +1808,7 @@ static pj_status_t app_init()
 
     }
 
-    /* Add TCP IPv6 transport unless it's disabled. */		//Ìí¼ÓTCP IPv6´«Êä¿Ú
+    /* Add TCP IPv6 transport unless it's disabled. */		//æ·»åŠ TCP IPv6ä¼ è¾“å£
     if (!app_config.no_tcp && app_config.ipv6) 
 	{
 		pjsua_acc_id aid;
@@ -1843,13 +1842,13 @@ static pj_status_t app_init()
 
 
 #if defined(PJSIP_HAS_TLS_TRANSPORT) && PJSIP_HAS_TLS_TRANSPORT!=0
-    /* Add TLS transport when application wants one */		//Ìí¼ÓTLS´«Êä¿Ú
+    /* Add TLS transport when application wants one */		//æ·»åŠ TLSä¼ è¾“å£
     if (app_config.use_tls) 
 	{
 
 		pjsua_acc_id acc_id;
 
-		/* Copy the QoS settings */				//¸´ÖÆQoSÉèÖÃ
+		/* Copy the QoS settings */				//å¤åˆ¶QoSè®¾ç½®
 		tcp_cfg.tls_setting.qos_type = tcp_cfg.qos_type;
 		pj_memcpy(&tcp_cfg.tls_setting.qos_params, &tcp_cfg.qos_params, 
 			  sizeof(tcp_cfg.qos_params));
@@ -1879,7 +1878,7 @@ static pj_status_t app_init()
 		pjsua_acc_set_online_status(acc_id, PJ_TRUE);
     }
 
-    /* Add TLS IPv6 transport unless it's disabled. */		//Ìí¼ÓTLS IPv6´«Êä¿Ú
+    /* Add TLS IPv6 transport unless it's disabled. */		//æ·»åŠ TLS IPv6ä¼ è¾“å£
     if (app_config.use_tls && app_config.ipv6) 
 	{
 		pjsua_acc_id aid;
@@ -1911,12 +1910,12 @@ static pj_status_t app_init()
 		pjsua_acc_set_online_status(current_acc, PJ_TRUE);
     }
 
-#endif			//¶¨ÒåÁËTLS 
+#endif			//å®šä¹‰äº†TLS 
 
 
 /**************************************************************************************/
 
-    if (transport_id == -1) 		//±¾µØÕË»§ transport_id?
+    if (transport_id == -1) 		//æœ¬åœ°è´¦æˆ· transport_id?
 	{
 		PJ_LOG(1,(THIS_FILE, "Error: no transport is configured"));
 		status = -1;
@@ -1924,25 +1923,25 @@ static pj_status_t app_init()
     }
 
 
-    /* Add accounts */									//Ìí¼ÓÕË»§
+    /* Add accounts */									//æ·»åŠ è´¦æˆ·
     for (i=0; i<app_config.acc_cnt; ++i) 
 	{
 		app_config.acc_cfg[i].rtp_cfg = app_config.rtp_cfg;
 		app_config.acc_cfg[i].reg_retry_interval = 300;
 		app_config.acc_cfg[i].reg_first_retry_interval = 60;
 
-		app_config_init_video(&app_config.acc_cfg[i]);					//³õÊ¼»¯ÊÓÆµÅäÖÃ
+		app_config_init_video(&app_config.acc_cfg[i]);					//åˆå§‹åŒ–è§†é¢‘é…ç½®
 
-		status = pjsua_acc_add(&app_config.acc_cfg[i], PJ_TRUE, NULL);	//Ìí¼ÓÕË»§
+		status = pjsua_acc_add(&app_config.acc_cfg[i], PJ_TRUE, NULL);	//æ·»åŠ è´¦æˆ·
 		if (status != PJ_SUCCESS)
 		    goto on_error;
-		pjsua_acc_set_online_status(current_acc, PJ_TRUE);						//ÉèÖÃÔÚÏß×´Ì¬
+		pjsua_acc_set_online_status(current_acc, PJ_TRUE);						//è®¾ç½®åœ¨çº¿çŠ¶æ€
     }
 
-    /* Add buddies */									//Ìí¼ÓºÃÓÑ
+    /* Add buddies */									//æ·»åŠ å¥½å‹
     for (i=0; i<app_config.buddy_cnt; ++i) 
 	{
-		status = pjsua_buddy_add(&app_config.buddy_cfg[i], NULL);			//Ìí¼ÓºÃÓÑ
+		status = pjsua_buddy_add(&app_config.buddy_cfg[i], NULL);			//æ·»åŠ å¥½å‹
 		if (status != PJ_SUCCESS) 
 		{
 	    	PJ_PERROR(1,(THIS_FILE, status, "Error adding buddy"));
@@ -1950,7 +1949,7 @@ static pj_status_t app_init()
 		}
     }
 
-    /* Optionally disable some codec */			//ÊÓÇé¿ö½ûÓÃÒ»Ğ©±àÂë
+    /* Optionally disable some codec */			//è§†æƒ…å†µç¦ç”¨ä¸€äº›ç¼–ç 
     for (i=0; i<app_config.codec_dis_cnt; ++i) 
 	{
 		pjsua_codec_set_priority(&app_config.codec_dis[i],PJMEDIA_CODEC_PRIO_DISABLED);
@@ -1959,18 +1958,18 @@ static pj_status_t app_init()
 #endif
     }
 
-    /* Optionally set codec orders */				//ÊÓÇé¿öÉèÖÃ±àÂëÃüÁî
+    /* Optionally set codec orders */				//è§†æƒ…å†µè®¾ç½®ç¼–ç å‘½ä»¤
     for (i=0; i<app_config.codec_cnt; ++i) 			// app_config.codec_cnt=0
 	{
 		pjsua_codec_set_priority(&app_config.codec_arg[i],
-				 (pj_uint8_t)(PJMEDIA_CODEC_PRIO_NORMAL+i+9));			//ÉèÖÃÓÅÏÈ¼¶
+				 (pj_uint8_t)(PJMEDIA_CODEC_PRIO_NORMAL+i+9));			//è®¾ç½®ä¼˜å…ˆçº§
 #if PJSUA_HAS_VIDEO
 		pjsua_vid_codec_set_priority(&app_config.codec_arg[i],
 				   (pj_uint8_t)(PJMEDIA_CODEC_PRIO_NORMAL+i+9));
 #endif
     }
 
-    /* Use null sound device? */					//??Á¢ÌåÉù
+    /* Use null sound device? */					//??ç«‹ä½“å£°
 #ifndef STEREO_DEMO
     if (app_config.null_audio) 
 	{
@@ -1980,7 +1979,7 @@ static pj_status_t app_init()
     }
 #endif
 
-    if (app_config.capture_dev  != PJSUA_INVALID_ID || app_config.playback_dev != PJSUA_INVALID_ID) 		//ÎŞ²É¼¯Éè±¸Ò²ÎŞ²¥·ÅÉè±¸
+    if (app_config.capture_dev  != PJSUA_INVALID_ID || app_config.playback_dev != PJSUA_INVALID_ID) 		//æ— é‡‡é›†è®¾å¤‡ä¹Ÿæ— æ’­æ”¾è®¾å¤‡
     {
 		status = pjsua_set_snd_dev(app_config.capture_dev, 
 					   app_config.playback_dev);
@@ -1988,7 +1987,7 @@ static pj_status_t app_init()
 		    goto on_error;
     }
 
-    /* Init call setting */							//³õÊ¼»¯ºô½ĞÉèÖÃ
+    /* Init call setting */							//åˆå§‹åŒ–å‘¼å«è®¾ç½®
     pjsua_call_setting_default(&call_opt);
     call_opt.aud_cnt = app_config.aud_cnt;
     call_opt.vid_cnt = app_config.vid.vid_cnt;
@@ -2006,13 +2005,13 @@ pj_status_t pjsua_app_init(const pjsua_app_cfg_t *cfg)
 {
     pj_status_t status;
 	HI_S32 s32Ret;
-    pj_memcpy(&app_cfg, cfg, sizeof(app_cfg));		//ÏàÍ¬ÀàĞÍµÄ²»Í¬Ö¸Õë
+    pj_memcpy(&app_cfg, cfg, sizeof(app_cfg));		//ç›¸åŒç±»å‹çš„ä¸åŒæŒ‡é’ˆ
 
-    status = app_init();								//Ó¦ÓÃµÄ³õÊ¼»¯
+    status = app_init();								//åº”ç”¨çš„åˆå§‹åŒ–
     if (status != PJ_SUCCESS)
 		return status;
 
-    /* Init CLI if configured */    				//ÈôÅäÖÃÍê£¬³õÊ¼»¯¿Í»§¶Ë
+    /* Init CLI if configured */    				//è‹¥é…ç½®å®Œï¼Œåˆå§‹åŒ–å®¢æˆ·ç«¯
     if (app_config.use_cli) 
 	{
 		status = cli_init();				//
@@ -2030,20 +2029,20 @@ pj_status_t pjsua_app_run(pj_bool_t wait_telnet_cli)
     pj_thread_t *stdout_refresh_thread = NULL;
     pj_status_t status;
 
-    /* Start console refresh thread */			//Æô¶¯¿ØÖÆË¢ĞÂ¹«¹²½çÃæÏß³Ì
+    /* Start console refresh thread */			//å¯åŠ¨æ§åˆ¶åˆ·æ–°å…¬å…±ç•Œé¢çº¿ç¨‹
     if (stdout_refresh > 0) 
 	{
 		pj_thread_create(app_config.pool, "stdout", &stdout_refresh_proc,NULL, 0, 0, &stdout_refresh_thread);
     }
 
-    status = pjsua_start();			//Æô¶¯pjsua
+    status = pjsua_start();			//å¯åŠ¨pjsua
     if (status != PJ_SUCCESS)
 		goto on_return;
 
     if (app_config.use_cli && (app_config.cli_cfg.cli_fe & CLI_FE_TELNET)) 
 	{
 		char info[128];
-		cli_get_info(info, sizeof(info));		//»ñÈ¡¿Í»§¶ËĞÅÏ¢
+		cli_get_info(info, sizeof(info));		//è·å–å®¢æˆ·ç«¯ä¿¡æ¯
 		if (app_cfg.on_started) 
 		{
 		    (*app_cfg.on_started)(status, info);
@@ -2057,30 +2056,30 @@ pj_status_t pjsua_app_run(pj_bool_t wait_telnet_cli)
 		}    
     }
 
-    /* If user specifies URI to call, then call the URI */		//Èç¹ûÓÃ»§ºô½ĞÖ¸¶¨URL£¬µ÷ÓÃURI
+    /* If user specifies URI to call, then call the URI */		//å¦‚æœç”¨æˆ·å‘¼å«æŒ‡å®šURLï¼Œè°ƒç”¨URI
     if (uri_arg.slen) 
 	{
-		pjsua_call_setting_default(&call_opt);								//³õÊ¼»¯ºô½ĞÉèÖÃ
+		pjsua_call_setting_default(&call_opt);								//åˆå§‹åŒ–å‘¼å«è®¾ç½®
 		call_opt.aud_cnt = app_config.aud_cnt;
 		call_opt.vid_cnt = app_config.vid.vid_cnt;
 
-		/*Ê¹ÓÃÖ¸¶¨ÓÃ»§È¥ºô½ĞÖ¸¶¨URI*/
-		pjsua_call_make_call(current_acc, &uri_arg, &call_opt, NULL,NULL, NULL);	//´ò¿ªÉè±¸(º£Ë¼ÎŞÉè±¸..)
+		/*ä½¿ç”¨æŒ‡å®šç”¨æˆ·å»å‘¼å«æŒ‡å®šURI*/
+		pjsua_call_make_call(current_acc, &uri_arg, &call_opt, NULL,NULL, NULL);	//æ‰“å¼€è®¾å¤‡(æµ·æ€æ— è®¾å¤‡..)
     }   
 
     app_running = PJ_TRUE;
 	
 	/***************************************************
-	 *			ÓĞ¿Í»§Ê±----½ÓÈëºóÖ±½Ó½¨Á¢Í¨ĞÅ
-	 *			´Ë´¦ wait_telnet_cli Îª true
+	 *			æœ‰å®¢æˆ·æ—¶----æ¥å…¥åç›´æ¥å»ºç«‹é€šä¿¡
+	 *			æ­¤å¤„ wait_telnet_cli ä¸º true
 	 *
 	****************************************************/
     if (app_config.use_cli)			
     {
-		status = cli_main(wait_telnet_cli);		//´ò¿ªÈÕÖ¾ µÈ´ıÍË³ö....
+		status = cli_main(wait_telnet_cli);		//æ‰“å¼€æ—¥å¿— ç­‰å¾…é€€å‡º....
 	}
     else
-		legacy_main();					//Ö÷º¯ÊıÓÃ»§½çÃæ»·»Ø
+		legacy_main();					//ä¸»å‡½æ•°ç”¨æˆ·ç•Œé¢ç¯å›
 
     status = PJ_SUCCESS;
 

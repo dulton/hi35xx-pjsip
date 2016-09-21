@@ -23,14 +23,13 @@ do{\
     printf("s32Ret=%#x,fuc:%s,line:%d\n", s32Ret, __FUNCTION__, __LINE__);\
 }while(0)
 
-
-///全局变量音频指针
+///鍏ㄥ眬鍙橀噺闊抽鎸囬拡
 
 
 
 
 static PAYLOAD_TYPE_E gs_enPayloadType = PT_G711A;
-static AUDIO_FRAME_S stFrame; 				//音频帧结构体
+static AUDIO_FRAME_S stFrame; 				//闊抽甯х粨鏋勪綋
 
 static HI_BOOL gs_bMicIn = HI_FALSE;
 

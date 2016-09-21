@@ -662,7 +662,6 @@ PJ_DEF(pj_status_t) pjmedia_master_port_destroy(pjmedia_master_port *m,
 	m->lock = NULL;
     }
 
-
     return PJ_SUCCESS;
 }
 
